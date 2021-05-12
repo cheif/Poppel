@@ -1,0 +1,16 @@
+{
+  "object": {
+    "pins": [
+      {
+        "package": "SwiftELM",
+        "repositoryURL": "/Users/jag/repos/SwiftELM",
+        "state": {
+          "branch": null,
+          "revision": "b3cfb24dd114108a2a7f372fb08560325ff7c5dd",
+          "version": "0.0.1"
+        }
+      }
+    ]
+  },
+  "version": 1
+}
