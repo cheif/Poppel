@@ -9,22 +9,28 @@ import SwiftUI
 import SwiftELM
 
 struct Model {
-    let text: String
+    let number: Int
 }
 
 enum Message {
-    case click
+    case increse
 }
 
 let app = SwiftELM.sandbox(
-    initial: Model(text: "Hello world"),
+    initial: Model(number: 10),
     view: { model in
-        Button(onClick: Message.click) {
-            Text(model.text)
+        VStack(spacing: 30) {
+            Button(onClick: Message.increse) {
+                Text("Increase")
+            }
+            MyText<Message>("Current: \(model.number)")
         }
     },
     update: { (message: Message, model: Model) in
-        .init(text: String(model.text.dropLast()))
+        switch message {
+        case .increse:
+            return .init(number: model.number + 1)
+        }
     }
 )
 
