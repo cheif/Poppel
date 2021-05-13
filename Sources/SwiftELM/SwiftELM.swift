@@ -7,17 +7,16 @@ public protocol Component {
     func render(_ sink: @escaping (Message) -> Void) -> Content
 }
 
-public struct Text: Component {
-    public typealias Message = Never
-    private let text: String
-    public init(_ text: String) {
-        self.text = text
-    }
 
-    public func render(_ sink: (Never) -> Void) -> some View {
-        SwiftUI.Text(text)
+// Components that don't have any actions (AKA Message == Never) can just use SwiftUI-Views straight away
+public protocol WrappedComponent: Component {}
+public extension WrappedComponent where Self: SwiftUI.View {
+    func render(_ sink: @escaping (Never) -> Void) -> Self {
+        return self
     }
 }
+
+extension Text: WrappedComponent {}
 
 public struct Button<Message, Label: View>: Component {
     let label: Label
