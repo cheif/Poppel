@@ -14,6 +14,7 @@ struct Model {
 
 enum Message {
     case increse
+    case decrease
 }
 
 let app = SwiftELM.sandbox(
@@ -24,12 +25,17 @@ let app = SwiftELM.sandbox(
                 Text("Increase")
             }
             MyText<Message>("Current: \(model.number)")
+            Button(onClick: Message.decrease) {
+                Text("Decrease")
+            }
         }
     },
     update: { (message: Message, model: Model) in
         switch message {
         case .increse:
             return .init(number: model.number + 1)
+        case .decrease:
+            return .init(number: model.number - 1)
         }
     }
 )
