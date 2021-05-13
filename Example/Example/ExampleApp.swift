@@ -19,7 +19,9 @@ enum Message {
 let app = SwiftELM.sandbox(
     initial: Model(text: "Hello world"),
     view: { model in
-        Button(Text(model.text), onClick: Message.click)
+        Button(onClick: Message.click) {
+            Text(model.text)
+        }
     },
     update: { (message: Message, model: Model) in
         .init(text: String(model.text.dropLast()))

@@ -4,31 +4,32 @@ public protocol Component {
     associatedtype Message
     associatedtype Content: SwiftUI.View
 
-    var body: Content { get }
-    var sink: ((Message) -> Void)? { get set }
+    func render(_ sink: @escaping (Message) -> Void) -> Content
 }
 
 public struct Text: Component {
     public typealias Message = Never
-    public let body: SwiftUI.Text
+    private let text: String
     public init(_ text: String) {
-        body = SwiftUI.Text(text)
+        self.text = text
     }
-    public var sink: ((Message) -> Void)?
+
+    public func render(_ sink: (Never) -> Void) -> some View {
+        SwiftUI.Text(text)
+    }
 }
 
 public struct Button<Message, Label: View>: Component {
-    let content: Label
+    let label: Label
     let message: Message
-    public init(_ content: Label, onClick message: Message) {
-        self.content = content
+    public init(onClick message: Message, _ label: () -> Label) {
         self.message = message
+        self.label = label()
     }
 
-    public var body: some View {
-        SwiftUI.Button(action: { sink?(message) }, label: { content })
+    public func render(_ sink: @escaping (Message) -> Void) -> some View {
+        SwiftUI.Button(action: { sink(message)}, label: { label })
     }
-    public var sink: ((Message) -> Void)?
 }
 
 public struct Sandbox<Model, C: Component> {
@@ -44,12 +45,9 @@ public struct Sandbox<Model, C: Component> {
 
     public var body: some View {
         Content(stateContainer: stateContainer, transform: { model in
-            var view = view(model)
-            view.sink = { message in
+            view(model).render({ message in
                 stateContainer.model = update(message, model)
-            }
-
-            return view.body
+            })
         })
     }
 
