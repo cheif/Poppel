@@ -14,7 +14,7 @@ struct App: ElmApp {
     }
 
     enum Message {
-        case increse
+        case increase
         case decrease
     }
 
@@ -22,7 +22,7 @@ struct App: ElmApp {
         initial: .init(number: 10),
         view: { model in
             VStack(spacing: 30) {
-                Button(onClick: Message.increse) {
+                Button(onClick: Message.increase) {
                     Text("Increase")
                 }
                 Text<Message>("Current: \(model.number)")
@@ -33,7 +33,7 @@ struct App: ElmApp {
         },
         update: { (message: Message, model: Model) in
             switch message {
-            case .increse:
+            case .increase:
                 return .init(number: model.number + 1)
             case .decrease:
                 return .init(number: model.number - 1)
