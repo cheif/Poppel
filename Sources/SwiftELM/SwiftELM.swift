@@ -8,13 +8,20 @@ public protocol Component {
 }
 
 // This is needed since we e.g. need everything in a VStack to have the same Message, but it would be nice to solve it in some way so that we could mix in stuff that don't have messages (Message == Never) as well.
-public struct MyText<Message>: Component {
+public struct Text<Message>: Component {
     let text: String
     public init(_ text: String) {
         self.text = text
     }
     public func render(_ sink: @escaping (Message) -> Void) -> SwiftUI.Text {
         .init(text)
+    }
+}
+
+public struct EmptyComponent<Message>: Component {
+    public init() {}
+    public func render(_ sink: @escaping (Message) -> Void) -> some View {
+        SwiftUI.EmptyView()
     }
 }
 
@@ -66,7 +73,7 @@ public struct VStack<Content>: Component where Content: Component {
     }
 }
 
-public struct Button<Message, Label: View>: Component {
+public struct Button<Message, Label: Component>: Component where Label.Message == Message {
     let label: Label
     let message: Message
     public init(onClick message: Message, _ label: () -> Label) {
@@ -74,31 +81,31 @@ public struct Button<Message, Label: View>: Component {
         self.label = label()
     }
 
-    public func render(_ sink: @escaping (Message) -> Void) -> SwiftUI.Button<Label> {
-        .init(action: { sink(message)}, label: { label })
+    public func render(_ sink: @escaping (Message) -> Void) -> SwiftUI.Button<Label.Content> {
+        .init(action: { sink(message)}, label: { label.render(sink) })
     }
 }
 
-public struct Sandbox<Model, C: Component> {
-    private let stateContainer: StateContainer
-    private let view: (Model) -> C
-    private let update: (C.Message, Model) -> Model
+public struct AppContainer<Model, Content: Component>: View {
+    private let container: ModelContainer<Model>
+    private let view: (Model) -> Content
+    private let update: (Content.Message, Model) -> Model
 
-    init(initial: Model, view: @escaping (Model) -> C, update: @escaping (C.Message, Model) -> Model) {
-        stateContainer = .init(model: initial)
+    init(initial: Model, view: @escaping (Model) -> Content, update: @escaping (Content.Message, Model) -> Model) {
+        self.container = .init(model: initial)
         self.view = view
         self.update = update
     }
 
     public var body: some View {
-        Content(stateContainer: stateContainer, transform: { model in
-            view(model).render({ message in
-                stateContainer.model = update(message, model)
-            })
+        RenderContainer(container: container, transform: { model in
+            view(model).render { message in
+                container.model = update(message, container.model)
+            }
         })
     }
 
-    class StateContainer: ObservableObject {
+    class ModelContainer<Model>: ObservableObject {
         @Published var model: Model
 
         init(model: Model) {
@@ -106,18 +113,34 @@ public struct Sandbox<Model, C: Component> {
         }
     }
 
-    struct Content: View {
-        @ObservedObject var stateContainer: StateContainer
-        let transform: (Model) -> C.Content
+    struct RenderContainer: View {
+        @ObservedObject var container: ModelContainer<Model>
+        let transform: (Model) -> Content.Content
 
         var body: some View {
-            transform(stateContainer.model)
+            transform(container.model)
+        }
+    }
+}
+
+@available(iOS 14.0, *)
+public protocol ElmApp: App {
+    associatedtype Content: Component
+    associatedtype Model
+    var container: AppContainer<Model, Content> { get }
+}
+
+@available(iOS 14.0, *)
+extension ElmApp {
+    public var body: some Scene {
+        WindowGroup {
+            container
         }
     }
 }
 
 public struct SwiftELM {
-    public static func sandbox<Model, C: Component>(initial: Model, view: @escaping (Model) -> C, update: @escaping (C.Message, Model) -> Model) -> Sandbox<Model, C> {
-        Sandbox(initial: initial, view: view, update: update)
+    public static func sandbox<Model, C: Component>(initial: Model, view: @escaping (Model) -> C, update: @escaping (C.Message, Model) -> Model) -> AppContainer<Model, C> {
+        AppContainer(initial: initial, view: view, update: update)
     }
 }

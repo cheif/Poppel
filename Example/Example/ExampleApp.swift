@@ -5,53 +5,39 @@
 //  Created by Dan Berglund on 2021-05-12.
 //
 
-import SwiftUI
 import SwiftELM
 
-struct Model {
-    let number: Int
-}
-
-enum Message {
-    case increse
-    case decrease
-}
-
-let app = SwiftELM.sandbox(
-    initial: Model(number: 10),
-    view: { model in
-        VStack(spacing: 30) {
-            Button(onClick: Message.increse) {
-                Text("Increase")
-            }
-            MyText<Message>("Current: \(model.number)")
-            Button(onClick: Message.decrease) {
-                Text("Decrease")
-            }
-        }
-    },
-    update: { (message: Message, model: Model) in
-        switch message {
-        case .increse:
-            return .init(number: model.number + 1)
-        case .decrease:
-            return .init(number: model.number - 1)
-        }
-    }
-)
-
-
 @main
-struct ExampleApp: App {
-    var body: some Scene {
-        WindowGroup {
-            app.body
-        }
+struct App: ElmApp {
+    struct Model {
+        let number: Int
     }
-}
 
-struct ContentViewPreviewProvider: PreviewProvider {
-    static var previews: some View {
-        app.body
+    enum Message {
+        case increse
+        case decrease
     }
+
+    let container = SwiftELM.sandbox(
+        initial: .init(number: 10),
+        view: { model in
+            VStack(spacing: 30) {
+                Button(onClick: Message.increse) {
+                    Text("Increase")
+                }
+                Text<Message>("Current: \(model.number)")
+                Button(onClick: Message.decrease) {
+                    Text("Decrease")
+                }
+            }
+        },
+        update: { (message: Message, model: Model) in
+            switch message {
+            case .increse:
+                return .init(number: model.number + 1)
+            case .decrease:
+                return .init(number: model.number - 1)
+            }
+        }
+    )
 }
