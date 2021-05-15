@@ -166,7 +166,7 @@ extension ElmApp {
 }
 
 public struct SwiftELM {
-    public static func sandbox<Model, C: Component>(initial: Model, view: @escaping (Model) -> C, update: @escaping (C.Message, Model) -> Model) -> AppContainer<Model, C> {
+    public static func sandbox<Model, C: Component>(initial: Model, @ComponentBuilder view: @escaping (Model) -> C, update: @escaping (C.Message, Model) -> Model) -> AppContainer<Model, C> {
         AppContainer(initial: initial, view: view, update: update)
     }
 }

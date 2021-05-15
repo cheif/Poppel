@@ -23,20 +23,20 @@ struct App: ElmApp {
     let container = SwiftELM.sandbox(
         initial: .init(number: 10, showOther: false),
         view: { model in
+            if model.showOther {
+                Text<Message>("This is other!")
+            } else {
                 VStack(spacing: 30) {
-                    if model.showOther {
-                        Text<Message>("This is other!")
-                    } else {
-                        Button(onClick: Message.increase) {
-                            Text("Increase")
-                        }
-                        Text<Message>("Current: \(model.number)")
-                        Button(onClick: Message.decrease) {
-                            Text("Decrease")
-                        }
-                        Button(onClick: Message.other) {
-                            Text("Switch")
-                        }
+                    Button(onClick: Message.increase) {
+                        Text("Increase")
+                    }
+                    Text<Message>("Current: \(model.number)")
+                    Button(onClick: Message.decrease) {
+                        Text("Decrease")
+                    }
+                    Button(onClick: Message.other) {
+                        Text("Switch")
+                    }
                 }
             }
         },
