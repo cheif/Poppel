@@ -11,6 +11,34 @@ public struct Text<Message>: Component {
     }
 }
 
+public struct Image<Message>: Component {
+    let content: SwiftUI.Image
+    init(content: SwiftUI.Image) {
+        self.content = content
+    }
+    public init(uiImage: UIImage) {
+        self.init(content: .init(uiImage: uiImage))
+    }
+
+    public func render(_ sink: @escaping (Message) -> Void) -> SwiftUI.Image {
+        content
+    }
+}
+
+extension Image {
+    public func resizable(capInsets: EdgeInsets = .init(), resizingMode: SwiftUI.Image.ResizingMode = .stretch) -> Self {
+        .init(content: content.resizable(capInsets: capInsets, resizingMode: resizingMode))
+    }
+}
+
+@available(iOS 14.0, *)
+public struct ProgressView<Message>: Component {
+    public init() {}
+    public func render(_ sink: @escaping (Message) -> Void) -> SwiftUI.ProgressView<EmptyView, EmptyView>  {
+        SwiftUI.ProgressView()
+    }
+}
+
 public struct Button<Message, Label: Component>: Component where Label.Message == Message {
     let label: Label
     let message: Message
@@ -88,8 +116,7 @@ extension ComponentBuilder {
     }
 }
 
-public struct VStack<Content>: Component where Content: Component {
-    public typealias Message = Content.Message
+public struct VStack<Message, Content: Component>: Component where Content.Message == Message {
 
     private let alignment: HorizontalAlignment
     private let spacing: CGFloat?
@@ -100,7 +127,7 @@ public struct VStack<Content>: Component where Content: Component {
         self.content = content()
     }
 
-    public func render(_ sink: @escaping (Content.Message) -> Void) -> SwiftUI.VStack<Content.Content> {
+    public func render(_ sink: @escaping (Message) -> Void) -> SwiftUI.VStack<Content.Content> {
         SwiftUI.VStack(alignment: alignment, spacing: spacing, content: { content.render(sink) })
     }
 }

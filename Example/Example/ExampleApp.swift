@@ -7,6 +7,7 @@
 
 import Foundation
 import SwiftELM
+import UIKit
 
 extension URLSession {
     public func command<Message>(with url: URL, transform: @escaping (Data?, URLResponse?, Error?) -> Message) -> Command<Message> {
@@ -23,22 +24,38 @@ struct App: ElmApp {
     struct Model {
         let number: Int
         let showOther: Bool
-        let text: String?
+        let image: ImageStatus
+
+        enum ImageStatus {
+            case loading
+            case loaded(UIImage)
+            case error
+        }
     }
 
     enum Message {
         case increase
         case decrease
         case other
-        case gotText(String?)
+        case imageUpdate(Model.ImageStatus)
     }
 
     let container = SwiftELM.app(
-        initial: .init(number: 10, showOther: false, text: nil),
+        initial: .init(number: 10, showOther: false, image: .loading),
         view: { model in
             if model.showOther {
-                Text<Message>("This is other!")
-                Text<Message>(model.text ?? "Loading...")
+                VStack(spacing: 30) {
+                    Text<Message>("This is other!")
+                    switch model.image {
+                    case .loading:
+                        ProgressView<Message>()
+                    case .loaded(let image):
+                        Image<Message>(uiImage: image)
+                            .resizable()
+                    case .error:
+                        Text<Message>("Error")
+                    }
+                }
             } else {
                 VStack(spacing: 30) {
                     Button(onClick: Message.increase) {
@@ -57,16 +74,16 @@ struct App: ElmApp {
         update: { (message: Message, model: Model) in
             switch message {
             case .increase:
-                return (.init(number: model.number + 1, showOther: model.showOther, text: model.text), { _ in})
+                return (.init(number: model.number + 1, showOther: model.showOther, image: model.image), { _ in})
             case .decrease:
-                return (.init(number: model.number - 1, showOther: model.showOther, text: model.text), { _ in})
+                return (.init(number: model.number - 1, showOther: model.showOther, image: model.image), { _ in})
             case .other:
-                return (.init(number: model.number, showOther: true, text: model.text),
-                        URLSession.shared.command(with: URL(string: "https://elm-lang.org/assets/public-opinion.txt")!, transform: { data, _, _ in
-                            Message.gotText(data.flatMap { String(data: $0, encoding: .utf8) })
-                        }))
-            case .gotText(let text):
-                return (.init(number: model.number, showOther: true, text: text), { _ in})
+                return (.init(number: model.number, showOther: true, image: model.image),
+                        URLSession.shared.command(with: URL(string: "https://www.stonefactory.se/pub_images/original/plant-japanskt-prydnadskorsbar-prunus-kanzan-100-120-cm-stonefactory.se.jpg?extend=copy&width=1440&method=fit&height=1440&type=webp")!) { data, _, _ in
+                            Message.imageUpdate(data.flatMap(UIImage.init).map(Model.ImageStatus.loaded) ?? .error)
+                        })
+            case .imageUpdate(let imageStatus):
+                return (.init(number: model.number, showOther: true, image: imageStatus), { _ in})
             }
         }
     )
