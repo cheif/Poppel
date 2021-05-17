@@ -3,18 +3,18 @@
 import PackageDescription
 
 let package = Package(
-    name: "SwiftELM",
+    name: "Poppel",
     platforms: [
         .iOS(.v13)
     ],
     products: [
         .library(
-            name: "SwiftELM",
-            targets: ["SwiftELM"]),
+            name: "Poppel",
+            targets: ["Poppel"]),
     ],
     targets: [
         .target(
-            name: "SwiftELM",
+            name: "Poppel",
             dependencies: [])
     ]
 )

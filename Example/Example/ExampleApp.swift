@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import SwiftELM
+import Poppel
 import UIKit
 
 extension URLSession {
@@ -20,7 +20,7 @@ extension URLSession {
 }
 
 @main
-struct App: ElmApp {
+struct App: Poppel.App {
     struct Model {
         let number: Int
         let showOther: Bool
@@ -40,7 +40,7 @@ struct App: ElmApp {
         case imageUpdate(Model.ImageStatus)
     }
 
-    let container = SwiftELM.app(
+    let container = Poppel.app(
         initial: .init(number: 10, showOther: false, image: .loading),
         view: { model in
             if model.showOther {

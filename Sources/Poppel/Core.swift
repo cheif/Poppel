@@ -59,7 +59,7 @@ public struct AppContainer<Model, Message, Content: Component>: View where Conte
 }
 
 @available(iOS 14.0, *)
-public protocol ElmApp: App {
+public protocol PoppelApp: SwiftUI.App {
     associatedtype Model
     associatedtype Message
     associatedtype Content: Component where Content.Message == Message
@@ -67,7 +67,7 @@ public protocol ElmApp: App {
 }
 
 @available(iOS 14.0, *)
-extension ElmApp {
+extension PoppelApp {
     public var body: some Scene {
         WindowGroup {
             container
@@ -75,7 +75,10 @@ extension ElmApp {
     }
 }
 
-public struct SwiftELM {
+public struct Poppel {
+    @available(iOS 14.0, *)
+    public typealias App = PoppelApp
+
     public static func sandbox<Model, Message, C: Component>(
         initial: Model,
         @ComponentBuilder view: @escaping (Model) -> C,

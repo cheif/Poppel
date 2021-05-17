@@ -7,15 +7,15 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1190C4602652DF83003B20BE /* Poppel in Frameworks */ = {isa = PBXBuildFile; productRef = 1190C45F2652DF83003B20BE /* Poppel */; };
 		11CEAC24264C3F21002B1B71 /* ExampleApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11CEAC23264C3F21002B1B71 /* ExampleApp.swift */; };
-		11D755A7264C429900EE887A /* SwiftELM in Frameworks */ = {isa = PBXBuildFile; productRef = 11D755A6264C429900EE887A /* SwiftELM */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		1190C45C2652DE7F003B20BE /* Poppel */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Poppel; path = ..; sourceTree = "<group>"; };
 		11CEAC20264C3F21002B1B71 /* Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Example.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		11CEAC23264C3F21002B1B71 /* ExampleApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExampleApp.swift; sourceTree = "<group>"; };
 		11CEAC2C264C3F26002B1B71 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		11CEAC32264C403A002B1B71 /* SwiftELM */ = {isa = PBXFileReference; lastKnownFileType = folder; name = SwiftELM; path = ..; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -23,7 +23,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				11D755A7264C429900EE887A /* SwiftELM in Frameworks */,
+				1190C4602652DF83003B20BE /* Poppel in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -35,7 +35,7 @@
 			children = (
 				11CEAC22264C3F21002B1B71 /* Example */,
 				11CEAC21264C3F21002B1B71 /* Products */,
-				11CEAC32264C403A002B1B71 /* SwiftELM */,
+				1190C45C2652DE7F003B20BE /* Poppel */,
 				11D755A5264C429900EE887A /* Frameworks */,
 			);
 			sourceTree = "<group>";
@@ -80,7 +80,7 @@
 			);
 			name = Example;
 			packageProductDependencies = (
-				11D755A6264C429900EE887A /* SwiftELM */,
+				1190C45F2652DF83003B20BE /* Poppel */,
 			);
 			productName = Example;
 			productReference = 11CEAC20264C3F21002B1B71 /* Example.app */;
@@ -312,9 +312,9 @@
 /* End XCConfigurationList section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		11D755A6264C429900EE887A /* SwiftELM */ = {
+		1190C45F2652DF83003B20BE /* Poppel */ = {
 			isa = XCSwiftPackageProductDependency;
-			productName = SwiftELM;
+			productName = Poppel;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
