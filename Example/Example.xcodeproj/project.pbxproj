@@ -13,6 +13,7 @@
 
 /* Begin PBXFileReference section */
 		1190C45C2652DE7F003B20BE /* Poppel */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Poppel; path = ..; sourceTree = "<group>"; };
+		1190C4612652E262003B20BE /* Counter.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = Counter.playground; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		11CEAC20264C3F21002B1B71 /* Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Example.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		11CEAC23264C3F21002B1B71 /* ExampleApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExampleApp.swift; sourceTree = "<group>"; };
 		11CEAC2C264C3F26002B1B71 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -52,6 +53,7 @@
 			isa = PBXGroup;
 			children = (
 				11CEAC23264C3F21002B1B71 /* ExampleApp.swift */,
+				1190C4612652E262003B20BE /* Counter.playground */,
 				11CEAC2C264C3F26002B1B71 /* Info.plist */,
 			);
 			path = Example;
